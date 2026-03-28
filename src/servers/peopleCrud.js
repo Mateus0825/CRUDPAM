@@ -1,4 +1,4 @@
-import { API_URL } from "./configApi";
+import API_URL from "./configApi";
 
 /*
     Função para buscar todas as pessoas

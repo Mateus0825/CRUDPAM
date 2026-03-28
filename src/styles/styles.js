@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { Button } from "react-native/types_generated/index";
+import { Button } from "react-native";
 
 export const styles = StyleSheet.create({
 

@@ -1,10 +1,23 @@
 {
-    "people" :[
-        {
-            "id": 1,
-            "firstName": "Mateus",
-            "lastName": "Silva",
-            "email": "mateus@email.com.br"
-        }
-    ]
+  "people": [
+    {
+      "firstName": "Mateus",
+      "lastName": "Silva",
+      "email": "mateus@email.com.br",
+      "id": "1"
+    },
+    {
+      "firstName": "Mateus",
+      "lastName": "Pinheiro",
+      "email": "Mtsilva@gmail.com",
+      "id": "tun4WNp5xgQ"
+    },
+    {
+      "firstName": "",
+      "lastName": "",
+      "email": "",
+      "id": "HHHsbcv-RTM"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

@@ -1,46 +1,41 @@
 import React, {useEffect, useState} from "react";
 import {View, Text, FlatList, Button} from "react-native";
 
-import styles from "../styles/styles";
+import {styles} from "../styles/styles";
 
-import { getAllPosts, deletePerson, getPeople } from "../servers/peopleCrud";
+import { deletePerson, getPeople } from "../servers/peopleCrud";
 
 export default function HomeScreen({navigation}) {
 
-    // estado da lista
     const [people, setPeople] = useState([]);
 
-    // função para carregar dados
     async function loadPeople() {
-
         const data = await getPeople();
-
         setPeople(data);
     }
 
-    // executar ao abrir a tela
     useEffect(() => {
         loadPeople();
-    }, []); 
+    }, []);
 
     return (
         <View style={styles.container}>
 
             <Text style={styles.title}>Pessoas</Text>
 
-            <Button title="Adicionar Pessoa" 
-            onPress={() => navigation.navigate("AddEdit")} 
+            <Button 
+                title="Adicionar Pessoa" 
+                onPress={() => navigation.navigate("AddEdit")} 
             />
 
             <FlatList
                 data={people}
                 keyExtractor={(item) => item.id.toString()}
-
                 renderItem={({item}) => (
-                    <cardPersonal
-                      item={item}
-                      navigation={navigation}
-                      loadPeople={loadPeople}
+                    <CardPersonal
+                        item={item}
+                        navigation={navigation}
+                        loadPeople={loadPeople}
                     />
                 )}
             />
@@ -49,41 +44,36 @@ export default function HomeScreen({navigation}) {
     );
 }
 
-    function CardPersonal({item, navigation, refresh}) {
+function CardPersonal({item, navigation, loadPeople}) {
 
-        return(
+    return(
+        <View style={styles.card}>
 
-            <View style={styles.card}>
+            <View>
+                <Text style={styles.name}>
+                    {item.firstName} {item.lastName}
+                </Text>
 
-                <View>
+                <Text style={styles.email}>
+                    {item.email}
+                </Text>
+            </View>
 
-                    <Text style={styles.name}>
-                        {item.firstName} {item.lastName}
-                    </Text>
+            <View>
+                <Button 
+                    title="Editar"
+                    onPress={() => navigation.navigate("AddEdit", { person: item })}
+                />
 
-                    <Text style={styles.email}>
-                        {item.email}
-                    </Text>
-
-                    </View>
-
-                   <View>
-
-                 <Button 
-                 title="Editar"
-                 onPress={() => navigation.navigate("AddEdit", { person: item })}
-                 />
-
-                 <Button
+                <Button
                     title="Deletar"
                     onPress={async () => {
                         await deletePerson(item.id);
-                        refresh();
+                        loadPeople();
                     }}
                 />  
-
-              </View>
-
             </View>
-        )
+
+        </View>
+    )
 }
