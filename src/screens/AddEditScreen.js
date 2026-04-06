@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { View, TextInput, Button } from "react-native";
+import { View, TextInput, Text, TouchableOpacity, Alert } from "react-native";
+
 import { styles } from "../styles/styles";
 import { createPerson, updatePerson } from "../servers/peopleCrud";
 
 export default function AddEditScreen({ route, navigation }) {
+
   const person = route.params?.person;
 
   const [firstName, setFirstName] = useState(person?.firstName || "");
@@ -11,6 +13,17 @@ export default function AddEditScreen({ route, navigation }) {
   const [email, setEmail] = useState(person?.email || "");
 
   async function save() {
+
+    if (!firstName.trim() || !lastName.trim() || !email.trim()) {
+      Alert.alert("Erro", "Preencha todos os campos!");
+      return;
+    }
+
+    if (!email.includes("@")) {
+      Alert.alert("Erro", "Digite um email válido!");
+      return;
+    }
+
     try {
       const data = { firstName, lastName, email };
 
@@ -21,37 +34,69 @@ export default function AddEditScreen({ route, navigation }) {
       }
 
       navigation.goBack();
+
     } catch (error) {
-      console.log("ERRO AO SALVAR:", error);
+      Alert.alert("Erro", "Não foi possível salvar!");
     }
   }
 
   return (
     <View style={styles.container}>
+
+      <Text style={styles.title}>
+        {person ? "Editar Pessoa" : "Nova Pessoa"}
+      </Text>
+
       <TextInput
-        placeholder="First Name"
+        placeholder="Nome"
         value={firstName}
         onChangeText={setFirstName}
-        style={{ borderWidth: 1, marginBottom: 10 }}
+        style={styles.input}
       />
 
       <TextInput
-        placeholder="Last Name"
+        placeholder="Sobrenome"
         value={lastName}
         onChangeText={setLastName}
-        style={{ borderWidth: 1, marginBottom: 10 }}
+        style={styles.input}
       />
 
       <TextInput
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
-        style={{ borderWidth: 1, marginBottom: 10 }}
+        style={styles.input}
+        keyboardType="email-address"
       />
 
-      <Button title="Salvar" onPress={save} />
+      <TouchableOpacity
+        style={{
+          backgroundColor: "#4CAF50",
+          padding: 12,
+          borderRadius: 10,
+          marginTop: 10
+        }}
+        onPress={save}
+      >
+        <Text style={{ color: "#FFF", textAlign: "center", fontWeight: "bold" }}>
+          Salvar
+        </Text>
+      </TouchableOpacity>
 
-      <Button title="Cancelar" onPress={() => navigation.goBack()} />
+      <TouchableOpacity
+        style={{
+          backgroundColor: "#999",
+          padding: 12,
+          borderRadius: 10,
+          marginTop: 10
+        }}
+        onPress={() => navigation.goBack()}
+      >
+        <Text style={{ color: "#FFF", textAlign: "center" }}>
+          Cancelar
+        </Text>
+      </TouchableOpacity>
+
     </View>
   );
 }
